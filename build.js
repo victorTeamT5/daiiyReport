@@ -9,15 +9,19 @@ const readline = require('readline').createInterface({
 const fs = require('fs');
 const path = require('path');
 
+const TEMPLATE_FILENAME = process.env.TEMPLATE_FILENAME || 'template.docx';
+const OUTPUT_FILENAME = process.env.OUTPUT_FILENAME || '[DATE].docx';
+
 const BASE_CONFIG = {
-  department: process.env.DEPARTMENT || '',
-  name: process.env.NAME || '',
-  startWork: process.env.STARTWORK || '',
-  offWork: process.env.OFFWORK || '',
-  startBreak: process.env.STARTBREAK || '',
-  offBreak: process.env.OFFBREAK || '',
-  workAM: process.env.WORKAM || '',
-  workPM: process.env.WORKPM || '',
+  DEPARTMENT: process.env.DEPARTMENT || '',
+  NAME: process.env.NAME || '',
+  START_WORK: process.env.START_WORK || '',
+  OFF_WORK: process.env.OFF_WORK || '',
+  START_BREAK: process.env.START_BREAK || '',
+  OFF_BREAK: process.env.OFF_BREAK || '',
+  WORK_AM: process.env.WORK_AM || '',
+  WORK_PM: process.env.WORK_PM || '',
+  DATE: dayjs().format('YYYYMMDD'),
 };
 
 readline.questionSync = (question) => new Promise((resolve, reject) => {
@@ -39,9 +43,8 @@ class ReportManager {
 
   #config = {
     ...BASE_CONFIG,
-    workAM: BASE_CONFIG.workAM.split(',').map((item) => item.trim()),
-    workPM: BASE_CONFIG.workPM.split(',').map((item) => item.trim()),
-    date: dayjs().format('YYYYMMDD'),
+    WORK_AM: BASE_CONFIG.WORK_AM.split(',').map((item) => item.trim()),
+    WORK_PM: BASE_CONFIG.WORK_PM.split(',').map((item) => item.trim()),
   };
 
   constructor(inputDirection, outputDirection) {
@@ -66,7 +69,7 @@ class ReportManager {
     // Render the document (Replace {first_name} by John, {last_name} by Doe, ...)
     this.#doc.render({
       ...this.#config,
-      date: dayjs(this.#config.date).format('YYYY/MM/DD'),
+      DATE: dayjs(this.#config.DATE).format('YYYY/MM/DD'),
     });
   }
 
@@ -89,16 +92,16 @@ class ReportManager {
       const dayRange = Math.abs(dayjs(startDate).diff(dayjs(endDate), 'd')) + 1;
       console.log('Range of day ', dayRange);
       for (let i = 0; i < dayRange; i += 1) {
-        this.#config.date = dayjs(startDate).add(i, 'd').format('YYYYMMDD');
-        console.log(`report date is ${this.#config.date}`);
+        this.#config.DATE = dayjs(startDate).add(i, 'd').format('YYYYMMDD');
+        console.log(`report date is ${this.#config.DATE}`);
         this.#render();
         this.#build();
         this.#init();
       }
     } else {
       const date = await readline.questionSync('repor date: ');
-      this.#config.date = dayjs(date).format('YYYYMMDD');
-      console.log(`report date is ${this.#config.date}`);
+      this.#config.DATE = dayjs(date).format('YYYYMMDD');
+      console.log(`report date is ${this.#config.DATE}`);
       this.#render();
       this.#build();
     }
@@ -126,6 +129,6 @@ class ReportManager {
 }
 
 new ReportManager(
-  path.resolve(__dirname, 'template.docx'),
-  path.resolve(__dirname, 'dist/[name]_[department]_[date].docx'),
+  path.resolve(__dirname, TEMPLATE_FILENAME),
+  path.resolve(__dirname, `dist/${OUTPUT_FILENAME}`),
 ).build();
