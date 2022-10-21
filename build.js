@@ -78,7 +78,7 @@ class ReportManager {
     }
 
     const dateType = await readline.questionSync(
-      'Date type (1) Specific Date, (2) Range Date\r\n default(1): ',
+      'Date type (1) Specific Date, (2) Range Date\r\ndefault(1): ',
     );
     const isRange = Number(dateType) === 2;
     if (isRange) {
