@@ -5,12 +5,14 @@
 ```
 DEPARTMENT='RD'
 NAME=
-STARTWORK='9:00'
-OFFWORK='18:00'
-STARTBREAK='12:00'
-OFFBREAK='13:00'
-WORKAM=           // 早上工作項目(可以用逗號區分
-WORKPM=           // 下午工作項目(可以用逗號區分
+START_WORK='9:00'
+OFF_WORK='18:00'
+START_BREAK='12:00'
+OFF_BREAK='13:00'
+WORK_AM=                                          // 早上工作項目(可以用逗號區分
+WORK_PM=                                          // 下午工作項目(可以用逗號區分
+OUTPUT_FILENAME='[NAME]-[DEPARTMENT]-[DATE].docx' // 輸出檔名可以帶入環境變數的任意值
+TEMPLATE_FILENAME='template.docx'
 ```
 
 ### How to use.
