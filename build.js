@@ -81,7 +81,7 @@ class ReportManager {
     }
 
     const dateType = await readline.questionSync(
-      'Date type (1) Specific Date, (2) Range Date\r\ndefault(1): ',
+      'Date type (1) Specific Date, (2) Range Date\r\ndate format (YYYY-MM-DD or YYYYMMDD or YYYY/MM/DD)\r\ndefault(1): ',
     );
     const isRange = Number(dateType) === 2;
     if (isRange) {
@@ -99,7 +99,7 @@ class ReportManager {
         this.#init();
       }
     } else {
-      const date = await readline.questionSync('repor date: ');
+      const date = await readline.questionSync('report date: ');
       this.#config.DATE = dayjs(date).format('YYYYMMDD');
       console.log(`report date is ${this.#config.DATE}`);
       this.#render();
